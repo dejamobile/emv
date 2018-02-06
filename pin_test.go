@@ -2,26 +2,26 @@ package emv
 
 import (
 	"testing"
-	"encoding/hex"
 	"log"
 	"reflect"
 	"time"
 )
 
 var (
-	pinblockIso4Handler PinblockHandler = NewIso4(must(hex.DecodeString("1fe206a02909246b3d3d3cce8d72975a")))
+	key                                 = make([]byte, 16)
+	pinblockIso4Handler PinblockHandler = NewIso4(key)
 	pan                                 = "2950000217619"
 	pin                                 = "12345"
 )
 
 func TestWrapPinblockIso4(t *testing.T) {
 	start := time.Now()
-	pinblock, err := pinblockIso4Handler.wrap(pan, pin)
+	pinblock, err := pinblockIso4Handler.Wrap(pan, pin)
 	if err != nil {
 		t.Fatalf("test failed, cause = %s\n", err.Error())
 	}
 	log.Printf("pinblock = %s\n", h(pinblock))
-	unwrappedPin, err := pinblockIso4Handler.unwrap(pan, pinblock)
+	unwrappedPin, err := pinblockIso4Handler.Unwrap(pan, pinblock)
 	if err != nil {
 		t.Fatalf("test failed, cause = %s\n", err.Error())
 	}
