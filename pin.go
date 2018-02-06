@@ -30,15 +30,15 @@ const (
 )
 
 type PinblockHandler interface {
-	wrap(pan string, pin string) ([]byte, error)
-	unwrap(pan string, pinblock []byte) (pin string, err error)
+	Wrap(pan string, pin string) ([]byte, error)
+	Unwrap(pan string, pinblock []byte) (pin string, err error)
 }
 
 type pinblockIso4 struct {
 	key []byte
 }
 
-func (pb pinblockIso4) wrap(pan string, pin string) (pinblock []byte, err error) {
+func (pb pinblockIso4) Wrap(pan string, pin string) (pinblock []byte, err error) {
 	if len(pan) > 16 || len(pan) < 12 {
 		return nil, errors.New("incorrect pan length (must be between 12 and 16")
 	}
@@ -54,7 +54,7 @@ func (pb pinblockIso4) wrap(pan string, pin string) (pinblock []byte, err error)
 	return pinblock, nil
 }
 
-func (pb pinblockIso4) unwrap(pan string, pinblock []byte) (pin string, err error) {
+func (pb pinblockIso4) Unwrap(pan string, pinblock []byte) (pin string, err error) {
 	if len(pan) > 16 || len(pan) < 12 {
 		return "", errors.New("incorrect pan length (must be between 12 and 16")
 	}
@@ -68,13 +68,6 @@ func (pb pinblockIso4) unwrap(pan string, pinblock []byte) (pin string, err erro
 
 func NewIso4(key []byte) pinblockIso4 {
 	return pinblockIso4{key}
-}
-
-func must(s []byte, err error) (out []byte) {
-	if err == nil {
-		out = s
-	}
-	return
 }
 
 func formatPINToPlainTextPinField(pin string, blockFormat int) []byte {
